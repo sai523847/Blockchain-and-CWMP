@@ -19,18 +19,35 @@ var router = express.Router();
 
 var fileToAdd = {};
 var hashToPass = "";
+let node;
 
 //建立IPFS節點，取名server
 const repoPath = 'server';
 node = new IPFS({
-    repo: repoPath
+    init: true,
+    repo: repoPath,
+    config: {
+        // Addresses: {
+        //     Swarm: [
+        //         "/ip4/0.0.0.0/tcp/4004",
+        //         "/ip4/127.0.0.1/tcp/4005/ws",
+        //         "/dns4/wrtc-star.discovery.libp2p.io/tcp/443/wss/p2p-webrtc-star"
+        //     ]
+        // }
+    }
 });
 // console.log("aaa")
 node.on('error', error => console.error('Something went terribly wrong!', error));
 node.on('start', () => console.log('Node started!'));
+node.on('ready', () => {
+    // Your node is now ready to use \o/
+    console.log('Node ready!');
+    // stopping a node
+})
 // console.log("bbb")
-node.start();
+// node.start();
 // console.log("ccc")
+
 
 
 var fileNameWithTime = "";
@@ -43,7 +60,7 @@ let storage = multer.diskStorage({
     //给上传文件重命名，获取添加后缀名
     filename: function (req, file, cb) {
         let fileFormat = (file.originalname).split(".");
-        fileNameWithTime = file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]
+        fileNameWithTime = fileFormat[0] + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]
         cb(null, fileNameWithTime);
     }
 });
@@ -53,6 +70,13 @@ let upload = multer({
 
 router.post('/upload-single', upload.single('fobject'), (req, res, next) => {
     console.log(req.file);
+
+    node.swarm.peers(function (err, peerInfos) {
+        if (err) {
+            throw err
+        }
+        console.log(peerInfos);
+    })
 
     //如果文件上传成功，获取文件的名字存入数据库
     if (req.file) {

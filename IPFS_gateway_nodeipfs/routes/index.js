@@ -3,9 +3,6 @@ var multer = require('multer');
 var IPFS = require('ipfs');
 var fs = require("fs");
 const adm_zip = require('adm-zip');
-const through = require('through2');
-const concat = require('concat-stream');
-const Buffer = require('safe-buffer').Buffer;
 var path = require('path');
 const multiaddr = require('multiaddr');
 

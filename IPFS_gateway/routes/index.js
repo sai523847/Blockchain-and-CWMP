@@ -76,12 +76,12 @@ router.get("/download", function(req, res, next) {
     //     console.log(peerInfos);
     // });
 
-    ipfs.swarm.peers(function (err, peerInfos) {
-        if (err) {
-            throw err
-        }
-        console.log(peerInfos);
-    });
+    // ipfs.swarm.peers(function (err, peerInfos) {
+    //     if (err) {
+    //         throw err
+    //     }
+    //     console.log(peerInfos);
+    // });
 
     ipfsDownload();
 
